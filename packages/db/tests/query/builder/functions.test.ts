@@ -204,6 +204,13 @@ describe(`QueryBuilder Functions`, () => {
       expect((select.name_or_default as any).name).toBe(`coalesce`)
     })
 
+    it(`coalesce infers non-nullable return type from spread args`, () => {
+      const strResult = coalesce(`hello`, `world`)
+      const numResult = coalesce(1, 2)
+      expect((strResult as any).name).toBe(`coalesce`)
+      expect((numResult as any).name).toBe(`coalesce`)
+    })
+
     it(`in function works`, () => {
       const query = new Query()
         .from({ employees: employeesCollection })
