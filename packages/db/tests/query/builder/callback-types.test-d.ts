@@ -152,6 +152,18 @@ describe(`Query Builder Callback Types`, () => {
         expectTypeOf(coalesce(user.name, `Unknown`)).toEqualTypeOf<
           BasicExpression<string>
         >()
+        // nullable-only args: null retained in result
+        expectTypeOf(coalesce(user.department_id)).toEqualTypeOf<
+          BasicExpression<number | null>
+        >()
+        // nullable args only: null retained (dept?.id can be undefined)
+        expectTypeOf(
+          coalesce(user.department_id, user.department_id),
+        ).toEqualTypeOf<BasicExpression<number | null>>()
+        // guaranteed non-null fallback: null stripped
+        expectTypeOf(coalesce(user.department_id, 0)).toEqualTypeOf<
+          BasicExpression<number>
+        >()
 
         return {
           upper_name: upper(user.name),
